@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
+// Fully static site: every tool runs in the browser, there is no server.
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  output: "export",
+  trailingSlash: true,
+  images: { unoptimized: true },
   turbopack: {
     rules: {
       "*.css": {

@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
+/* Khata (ledger notebook) palette: warm paper, ink, and a red margin rule. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #f6f1e7;
+  --paper-2: #efe7d8;
+  --sheet: #fffdf8;
+  --ink: #1d1b16;
+  --ink-2: #5b5548;
+  --ink-3: #8a8272;
+  --rule: #ddd2bd;
+  --rule-strong: #c9bb9f;
+  --margin: #c8402f;
+  --margin-soft: #f3dcd4;
+  --accent: #1f4b8f;
+  --ok: #2e7d4f;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #16140f;
+    --paper-2: #1e1b15;
+    --sheet: #221f18;
+    --ink: #efe8da;
+    --ink-2: #b8ae9b;
+    --ink-3: #857c6b;
+    --rule: #353026;
+    --rule-strong: #4a4335;
+    --margin: #e2604c;
+    --margin-soft: #3a211b;
+    --accent: #8db4f0;
+    --ok: #6cc290;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-sheet: var(--sheet);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-margin: var(--margin);
+  --color-margin-soft: var(--margin-soft);
+  --color-accent: var(--accent);
+  --color-ok: var(--ok);
+  --font-sans: var(--font-geist-sans), var(--font-bangla), system-ui, sans-serif;
+  --font-display: var(--font-fraunces), var(--font-bangla), Georgia, serif;
+  --font-bangla: var(--font-hind), var(--font-geist-sans), sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Faint ruled lines, like a khata page. */
+.ruled {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 31px,
+    var(--rule) 31px,
+    var(--rule) 32px
+  );
+}
+
+/* The red double margin line down the left of a sheet. */
+.margin-line {
+  position: relative;
+}
+.margin-line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  border-left: 1px solid var(--margin);
+  border-right: 1px solid var(--margin);
+  opacity: 0.55;
+}
+
+::selection {
+  background: var(--margin-soft);
 }

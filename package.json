@@ -1,21 +1,33 @@
 {
-  "name": "kagoj",
+  "name": "pdfkhata",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/copy-pdf-worker.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/copy-pdf-worker.mjs",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "npx serve out",
+    "lint": "eslint",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
+    "jszip": "^3.10.2",
     "next": "16.4.2",
+    "papaparse": "^5.7.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.4.299",
+    "qrcode": "^1.5.4",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
+    "@types/papaparse": "^5.5.2",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
