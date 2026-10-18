@@ -6,6 +6,16 @@ import type { PDFDocumentProxy } from "pdfjs-dist";
 
 export const PDF_MIME = "application/pdf";
 
+/** Pick the message matching the page language (lib code has no React context). */
+function msg(en: string, bn: string): string {
+  return typeof document !== "undefined" && document.documentElement.lang === "bn" ? bn : en;
+}
+
+const BN_DIGITS = "০১২৩৪৫৬৭৮৯";
+function bnNum(n: number): string {
+  return String(n).replace(/\d/g, (d) => BN_DIGITS[Number(d)]);
+}
+
 export async function loadPdfLib(file: File | ArrayBuffer): Promise<PDFDocument> {
   const { PDFDocument } = await import("pdf-lib");
   const bytes = file instanceof File ? await file.arrayBuffer() : file;
@@ -48,21 +58,23 @@ export async function renderPage(doc: PDFDocumentProxy, pageNumber: number, scal
  */
 export function parsePageRanges(input: string, pageCount: number): number[] {
   const pages = new Set<number>();
-  for (const raw of input.split(",")) {
+  // Accept Bangla digits and the Bangla comma-like separators people type.
+  const normalized = input.replace(/[০-৯]/g, (d) => String(BN_DIGITS.indexOf(d))).replace(/[–—]/g, "-");
+  for (const raw of normalized.split(",")) {
     const part = raw.trim();
     if (!part) continue;
     const m = part.match(/^(\d*)\s*-\s*(\d*)$/);
     if (m) {
       const start = m[1] ? Number(m[1]) : 1;
       const end = m[2] ? Number(m[2]) : pageCount;
-      if (start < 1 || end > pageCount || start > end) throw new Error(`“${part}” is outside pages 1–${pageCount}.`);
+      if (start < 1 || end > pageCount || start > end) throw new Error(msg(`“${part}” is outside pages 1–${pageCount}.`, `“${part}” পৃষ্ঠা ১–${bnNum(pageCount)}-এর বাইরে।`));
       for (let p = start; p <= end; p++) pages.add(p);
     } else if (/^\d+$/.test(part)) {
       const p = Number(part);
-      if (p < 1 || p > pageCount) throw new Error(`Page ${p} doesn't exist (this PDF has ${pageCount}).`);
+      if (p < 1 || p > pageCount) throw new Error(msg(`Page ${p} doesn't exist (this PDF has ${pageCount}).`, `${bnNum(p)} নম্বর পৃষ্ঠা নেই (এই PDF-এ ${bnNum(pageCount)}টি পৃষ্ঠা)।`));
       pages.add(p);
     } else {
-      throw new Error(`Couldn't read “${part}”. Use numbers like 1-3, 5.`);
+      throw new Error(msg(`Couldn't read “${part}”. Use numbers like 1-3, 5.`, `“${part}” বোঝা যায়নি। 1-3, 5 এভাবে লিখুন।`));
     }
   }
   return [...pages].sort((a, b) => a - b);

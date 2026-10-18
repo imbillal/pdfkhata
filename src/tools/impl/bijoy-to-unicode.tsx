@@ -1,6 +1,7 @@
 "use client";
 
-// TODO(bijoy-to-unicode): placeholder until the tool is built.
-export default function Tool() {
-  return <p className="text-sm text-ink-3">This tool is coming soon.</p>;
+import { BanglaConverter } from "@/tools/shared/BanglaConverter";
+
+export default function BijoyToUnicode() {
+  return <BanglaConverter direction="bijoy-to-unicode" />;
 }

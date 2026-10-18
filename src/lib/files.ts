@@ -1,6 +1,15 @@
 // Browser file helpers: formatting, reading, and saving results.
 
+const BN_DIGITS = "০১২৩৪৫৬৭৮৯";
+
+/** File size like "2.4 MB"; Bangla digits when the page is in Bangla. */
 export function formatBytes(bytes: number): string {
+  const text = formatBytesLatin(bytes);
+  const bn = typeof document !== "undefined" && document.documentElement.lang === "bn";
+  return bn ? text.replace(/\d/g, (d) => BN_DIGITS[Number(d)]) : text;
+}
+
+function formatBytesLatin(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   const units = ["KB", "MB", "GB"];
   let value = bytes / 1024;
@@ -60,10 +69,15 @@ export function readAsDataURL(file: Blob): Promise<string> {
   });
 }
 
-export function errorMessage(err: unknown, fallback = "Something went wrong."): string {
+export function errorMessage(err: unknown, fallback?: string): string {
   if (err instanceof Error && err.message) {
-    if (/encrypted/i.test(err.message)) return "This PDF is password-protected. Unlock it first, then try again.";
+    if (/encrypted/i.test(err.message)) {
+      return document.documentElement.lang === "bn"
+        ? "এই ফাইলটি পাসওয়ার্ড দিয়ে সুরক্ষিত। আগে আনলক করে আবার চেষ্টা করুন।"
+        : "This file is password-protected. Unlock it first, then try again.";
+    }
     return err.message;
   }
-  return fallback;
+  if (fallback) return fallback;
+  return document.documentElement.lang === "bn" ? "কিছু একটা ভুল হয়েছে।" : "Something went wrong.";
 }

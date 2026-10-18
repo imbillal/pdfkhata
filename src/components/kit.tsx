@@ -6,6 +6,7 @@
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { formatBytes } from "@/lib/files";
 import { takeHandoff } from "@/lib/handoff";
+import { useT } from "@/i18n/LocaleProvider";
 
 /* ---------- Layout ---------- */
 
@@ -52,6 +53,7 @@ export function FileDrop({
   title?: string;
   hint?: string;
 }) {
+  const t = useT();
   const [over, setOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -99,9 +101,9 @@ export function FileDrop({
         }}
       />
       <span className="rounded-full bg-ink px-5 py-2 text-sm font-medium text-paper">
-        {title ?? (multiple ? "Choose files" : "Choose a file")}
+        {title ?? (multiple ? t({ en: "Choose files", bn: "ফাইল বেছে নিন" }) : t({ en: "Choose a file", bn: "একটি ফাইল বেছে নিন" }))}
       </span>
-      <span className="text-sm text-ink-2">or drop {multiple ? "them" : "it"} here</span>
+      <span className="text-sm text-ink-2">{t({ en: `or drop ${multiple ? "them" : "it"} here`, bn: "অথবা এখানে টেনে এনে ছাড়ুন" })}</span>
       {hint && <span className="mt-1 text-xs text-ink-3">{hint}</span>}
     </label>
   );
@@ -198,12 +200,13 @@ export function ErrorNote({ message }: { message: string | null }) {
 }
 
 export function Progress({ value, label }: { value: number; label?: string }) {
+  const t = useT();
   const pct = Math.round(Math.max(0, Math.min(1, value)) * 100);
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex justify-between text-xs text-ink-3">
-        <span>{label ?? "Working…"}</span>
-        <span>{pct}%</span>
+        <span>{label ?? t({ en: "Working…", bn: "কাজ চলছে…" })}</span>
+        <span>{t.n(pct)}%</span>
       </div>
       <div className="h-1.5 overflow-hidden rounded-full bg-paper-2">
         <div className="h-full bg-margin transition-[width]" style={{ width: `${pct}%` }} />
@@ -222,6 +225,7 @@ export function FileRow({
   onRemove?: () => void;
   children?: ReactNode;
 }) {
+  const t = useT();
   return (
     <div className="flex items-center gap-3 border-b border-rule py-2.5 last:border-b-0">
       <span className="grid size-9 shrink-0 place-items-center rounded bg-paper-2 font-mono text-[10px] text-ink-2 uppercase">
@@ -233,7 +237,7 @@ export function FileRow({
       </div>
       {children}
       {onRemove && (
-        <button type="button" onClick={onRemove} aria-label={`Remove ${file.name}`} className="rounded p-1.5 text-ink-3 hover:bg-paper-2 hover:text-margin">
+        <button type="button" onClick={onRemove} aria-label={t({ en: `Remove ${file.name}`, bn: `${file.name} সরান` })} className="rounded p-1.5 text-ink-3 hover:bg-paper-2 hover:text-margin">
           <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
             <path d="m5 5 10 10M15 5 5 15" strokeLinecap="round" />
           </svg>

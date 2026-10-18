@@ -3,17 +3,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TOOLS, getCategory, type Tool } from "@/tools/registry";
+import { useT } from "@/i18n/LocaleProvider";
 
 const MAX_RESULTS = 8;
 
 function matches(tool: Tool, q: string): boolean {
-  const hay = [tool.name, tool.blurb, ...(tool.keywords ?? [])].join(" ").toLowerCase();
+  const hay = [tool.name.en, tool.name.bn, tool.blurb.en, tool.blurb.bn, ...(tool.keywords ?? [])].join(" ").toLowerCase();
   return q.split(/\s+/).every((word) => hay.includes(word));
 }
 
 /** ⌘K / Ctrl+K command palette for jumping straight to a tool. */
 export function ToolSearch() {
   const router = useRouter();
+  const t = useT();
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -34,9 +36,9 @@ export function ToolSearch() {
   const go = useCallback(
     (tool: Tool) => {
       dialogRef.current?.close();
-      router.push(`/tools/${tool.slug}/`);
+      router.push(t.href(`/tools/${tool.slug}/`));
     },
-    [router],
+    [router, t],
   );
 
   const onKeyDown = useCallback(
@@ -76,13 +78,13 @@ export function ToolSearch() {
           <circle cx="9" cy="9" r="6" />
           <path d="m14 14 4 4" strokeLinecap="round" />
         </svg>
-        <span>Find a tool</span>
+        <span className="hidden sm:inline">{t({ en: "Find a tool", bn: "টুল খুঁজুন" })}</span>
         <kbd className="hidden rounded border border-rule px-1.5 font-mono text-[11px] sm:inline">⌘K</kbd>
       </button>
 
       <dialog
         ref={dialogRef}
-        aria-label="Find a tool"
+        aria-label={t({ en: "Find a tool", bn: "টুল খুঁজুন" })}
         className="mx-auto mt-[12vh] w-[min(560px,calc(100vw-32px))] rounded-xl border border-rule-strong bg-sheet p-0 text-ink shadow-2xl backdrop:bg-ink/30 backdrop:backdrop-blur-sm"
         onClick={(e) => {
           if (e.target === e.currentTarget) e.currentTarget.close();
@@ -96,11 +98,11 @@ export function ToolSearch() {
             setActive(0);
           }}
           onKeyDown={onKeyDown}
-          placeholder="Merge, OCR, Bijoy, compress…"
+          placeholder={t({ en: "Merge, OCR, Bijoy, compress…", bn: "একত্র, OCR, বিজয়, ছোট করুন…" })}
           className="w-full border-b border-rule bg-transparent px-4 py-3.5 text-base outline-none placeholder:text-ink-3"
         />
         <ul className="max-h-[60vh] overflow-y-auto p-2">
-          {results.length === 0 && <li className="px-3 py-6 text-center text-sm text-ink-3">No tool matches “{query}”.</li>}
+          {results.length === 0 && <li className="px-3 py-6 text-center text-sm text-ink-3">{t({ en: `No tool matches “${query}”.`, bn: `“${query}” মেলে এমন টুল নেই।` })}</li>}
           {results.map((tool, i) => (
             <li key={tool.slug}>
               <button
@@ -109,9 +111,9 @@ export function ToolSearch() {
                 onClick={() => go(tool)}
                 className={`flex w-full items-baseline gap-3 rounded-lg px-3 py-2.5 text-left ${i === active ? "bg-paper-2" : ""}`}
               >
-                <span className="font-medium">{tool.name}</span>
-                <span className="truncate text-sm text-ink-3">{tool.blurb}</span>
-                <span className="ml-auto shrink-0 text-xs text-ink-3">{getCategory(tool.category).name}</span>
+                <span className="font-medium">{t(tool.name)}</span>
+                <span className="truncate text-sm text-ink-3">{t(tool.blurb)}</span>
+                <span className="ml-auto shrink-0 text-xs text-ink-3">{t(getCategory(tool.category).name)}</span>
               </button>
             </li>
           ))}

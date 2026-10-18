@@ -1,6 +1,7 @@
 "use client";
 
-// TODO(pdf-to-jpg): placeholder until the tool is built.
-export default function Tool() {
-  return <p className="text-sm text-ink-3">This tool is coming soon.</p>;
+import PdfToImages from "@/tools/shared/pdfToImages";
+
+export default function PdfToJpg() {
+  return <PdfToImages format="jpg" />;
 }
