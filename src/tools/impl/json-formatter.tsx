@@ -84,7 +84,7 @@ export default function JsonFormatter() {
               </div>
               <OutputArea label={t({ en: "Formatted JSON", bn: "সাজানো JSON" })} value={result.out} className="min-h-72" />
               {result.unsafe > 0 && (
-                <p className="text-xs text-margin">
+                <p className="text-xs text-danger">
                   {t({
                     en: `${t.n(result.unsafe)} number(s) are too large for exact precision and were rounded in the output.`,
                     bn: `${t.n(result.unsafe)}টি সংখ্যা এত বড় যে হুবহু রাখা যায়নি; আউটপুটে সেগুলো গোল করা হয়েছে।`,

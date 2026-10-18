@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Fraunces, Geist, Geist_Mono, Hind_Siliguri } from "next/font/google";
+import { Anek_Bangla } from "next/font/google";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LocaleProvider } from "@/i18n/LocaleProvider";
 import { LOCALES, hasLocale } from "@/i18n/locale";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "../globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], axes: ["opsz", "SOFT"] });
-const hind = Hind_Siliguri({ variable: "--font-hind", subsets: ["bengali", "latin"], weight: ["400", "500", "600", "700"] });
+// One family for both scripts, so English and Bangla pages feel like the same product.
+const anek = Anek_Bangla({ variable: "--font-anek", subsets: ["bengali", "latin"], weight: "variable", axes: ["wdth"] });
 
 export const dynamicParams = false;
 
@@ -22,15 +21,23 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
   const { lang } = await params;
   const bn = lang === "bn";
   return {
-    title: {
-      default: bn ? "PDFKhata · বিনামূল্যে PDF ও বাংলা ডকুমেন্ট টুল" : "PDFKhata · free PDF & Bangla document tools",
-      template: "%s · PDFKhata",
-    },
+    metadataBase: new URL(SITE_URL),
+    applicationName: SITE_NAME,
+    title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
     description: bn
-      ? "PDF, ছবি আর বাংলা লেখার বিনামূল্যের টুল, সবই চলে আপনার ব্রাউজারে। ফাইল কোথাও আপলোড হয় না। সাইন-আপ বা ওয়াটারমার্ক নেই।"
-      : "Free PDF, image and Bangla document tools that run in your browser. Your files never leave your device. No sign-up, no watermark.",
+      ? "PDF, ছবি আর বাংলা লেখার বিনামূল্যের টুল, সবই চলে আপনার ব্রাউজারে। ফাইল কোথাও আপলোড হয় না।"
+      : "Free PDF, image and Bangla document tools that run in your browser. Your files never leave your device.",
+    icons: { icon: "/icon.svg", apple: "/apple-touch-icon.png" },
+    formatDetection: { telephone: false },
   };
 }
+
+export const viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#1a2f7d" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e1118" },
+  ],
+};
 
 export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
   const { lang } = await params;
@@ -38,9 +45,9 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   return (
     <html
       lang={lang}
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${hind.variable} h-full antialiased`}
+      className={`${anek.variable} h-full antialiased`}
     >
-      <body className={`flex min-h-full flex-col ${lang === "bn" ? "font-bangla" : "font-sans"}`}>
+      <body className="flex min-h-full flex-col font-sans">
         <LocaleProvider locale={lang}>
           <SiteHeader locale={lang} />
           <main className="flex-1">{children}</main>

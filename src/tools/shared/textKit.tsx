@@ -236,7 +236,7 @@ export function TextInput({
         }}
         className={`${over ? "border-margin bg-margin-soft" : ""} ${className}`}
       />
-      {readError && <p className="text-xs text-margin">{readError}</p>}
+      {readError && <p className="text-xs text-danger">{readError}</p>}
     </div>
   );
 }

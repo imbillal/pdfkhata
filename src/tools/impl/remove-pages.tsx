@@ -106,7 +106,7 @@ export default function RemovePages() {
                 ? t({ en: `Remove ${count} page${count === 1 ? "" : "s"}`, bn: `${t.n(count)}টি পৃষ্ঠা মুছুন` })
                 : t({ en: "Remove pages", bn: "পৃষ্ঠা মুছুন" })}
             </Button>
-            {all && <p className="text-xs text-margin">{t({ en: "That's every page. Leave at least one.", bn: "এগুলো সব পৃষ্ঠা। অন্তত একটি রাখুন।" })}</p>}
+            {all && <p className="text-xs text-danger">{t({ en: "That's every page. Leave at least one.", bn: "এগুলো সব পৃষ্ঠা। অন্তত একটি রাখুন।" })}</p>}
           </SideSection>
           <ErrorNote message={error} />
           {result && (

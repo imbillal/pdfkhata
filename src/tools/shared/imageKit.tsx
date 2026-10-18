@@ -754,8 +754,8 @@ function BatchRow({
           {dims}
           {fmtBytes(t, item.file.size)}
         </p>
-        {item.broken && !outcome && <p className="text-xs text-margin">{t(openError(item.file))}</p>}
-        {outcome && !outcome.ok && <p className="text-xs text-margin">{outcome.error}</p>}
+        {item.broken && !outcome && <p className="text-xs text-danger">{t(openError(item.file))}</p>}
+        {outcome && !outcome.ok && <p className="text-xs text-danger">{outcome.error}</p>}
         {outcome?.ok && (
           <p className="text-xs text-ink-2">
             → {fmtDims(t, outcome.out.width, outcome.out.height)} px · {fmtBytes(t, outcome.out.blob.size)}{" "}

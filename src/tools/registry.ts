@@ -63,7 +63,7 @@ export const TOOLS: Tool[] = [
   { slug: "unicode-to-bijoy", name: { en: "Unicode → Bijoy", bn: "ইউনিকোড → বিজয়" }, blurb: { en: "Turn Unicode Bangla into Bijoy for press and DTP.", bn: "প্রেস ও ডিটিপির জন্য ইউনিকোডকে বিজয়ে রূপান্তর করুন।" }, category: "bangla", accepts: ["text"], keywords: ["sutonny", "বিজয়"] },
 
   // Image
-  { slug: "resize-image", name: { en: "Resize image", bn: "ছবির মাপ বদলান" }, blurb: { en: "Set exact width and height, or scale by percent.", bn: "নির্দিষ্ট দৈর্ঘ্য-প্রস্থ বা শতাংশে মাপ বদলান।" }, category: "image", accepts: ["image"], featured: true },
+  { slug: "resize-image", name: { en: "Resize image", bn: "ছবির মাপ বদলান" }, blurb: { en: "Set exact width and height, or scale by percent.", bn: "নির্দিষ্ট দৈর্ঘ্য-প্রস্থ বা শতাংশে মাপ বদলান।" }, category: "image", accepts: ["image"] },
   { slug: "compress-image", name: { en: "Compress image", bn: "ছবি ছোট করুন" }, blurb: { en: "Shrink photos with a quality slider.", bn: "মান ঠিক রেখে ছবির ফাইল সাইজ কমান।" }, category: "image", accepts: ["image"] },
   { slug: "convert-image", name: { en: "Convert image", bn: "ছবির ফরম্যাট বদলান" }, blurb: { en: "Switch between JPG, PNG and WebP.", bn: "JPG, PNG আর WebP-এর মধ্যে বদল করুন।" }, category: "image", accepts: ["image"] },
   { slug: "crop-image", name: { en: "Crop image", bn: "ছবি ক্রপ করুন" }, blurb: { en: "Drag to keep only the part you want.", bn: "টেনে শুধু দরকারি অংশটুকু রাখুন।" }, category: "image", accepts: ["image"] },
@@ -82,7 +82,7 @@ export const TOOLS: Tool[] = [
   { slug: "base64", name: { en: "Base64 encode/decode", bn: "Base64 এনকোড/ডিকোড" }, blurb: { en: "Encode or decode text, Unicode safe.", bn: "লেখা এনকোড বা ডিকোড করুন, বাংলাসহ।" }, category: "data", accepts: ["text"] },
 
   // Utilities
-  { slug: "qr-code", name: { en: "QR code generator", bn: "QR কোড তৈরি" }, blurb: { en: "Make a QR code for a link or text.", bn: "লিংক বা লেখার জন্য QR কোড বানান।" }, category: "utility", accepts: ["text"], featured: true },
+  { slug: "qr-code", name: { en: "QR code generator", bn: "QR কোড তৈরি" }, blurb: { en: "Make a QR code for a link or text.", bn: "লিংক বা লেখার জন্য QR কোড বানান।" }, category: "utility", accepts: ["text"] },
   { slug: "create-zip", name: { en: "Create ZIP", bn: "ZIP বানান" }, blurb: { en: "Bundle files into one ZIP archive.", bn: "অনেক ফাইল একটি ZIP-এ ভরুন।" }, category: "utility", accepts: ["any"] },
   { slug: "unzip", name: { en: "Unzip files", bn: "ZIP খুলুন" }, blurb: { en: "Open a ZIP and download what's inside.", bn: "ZIP খুলে ভেতরের ফাইল নামান।" }, category: "utility", accepts: ["zip"] },
   { slug: "hash-generator", name: { en: "Hash generator", bn: "হ্যাশ তৈরি" }, blurb: { en: "SHA-1, SHA-256 and SHA-512 of text or files.", bn: "লেখা বা ফাইলের SHA-1, SHA-256, SHA-512।" }, category: "utility", accepts: ["any"], keywords: ["checksum"] },

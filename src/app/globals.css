@@ -1,35 +1,69 @@
 @import "tailwindcss";
 
-/* Khata (ledger notebook) palette: warm paper, ink, and a red margin rule. */
+/*
+  "Khata cover" palette: the deep-blue cover of a Bangladeshi exercise book,
+  its white name label, and clean page white. Token names are shared with the
+  tool UIs: `margin` is the brand accent, `sheet` a surface, `paper` the page.
+*/
 :root {
-  --paper: #f6f1e7;
-  --paper-2: #efe7d8;
-  --sheet: #fffdf8;
-  --ink: #1d1b16;
-  --ink-2: #5b5548;
-  --ink-3: #8a8272;
-  --rule: #ddd2bd;
-  --rule-strong: #c9bb9f;
-  --margin: #c8402f;
-  --margin-soft: #f3dcd4;
-  --accent: #1f4b8f;
-  --ok: #2e7d4f;
+  --paper: #f4f6fa;
+  --paper-2: #eaedf3;
+  --sheet: #ffffff;
+  --ink: #121722;
+  --ink-2: #485166;
+  --ink-3: #7a8396;
+  --rule: #e2e6ee;
+  --rule-strong: #c9d0dc;
+  --margin: #2446b0;
+  --margin-soft: #e6ebfa;
+  --accent: #1c3891;
+  --ok: #157347;
+  --danger: #c23a2c;
+  --danger-soft: #fbe9e6;
+  --cover: #1a2f7d;
+  --cover-2: #22399a;
+  --label-line: #b7c3e6;
+  --logo: #1a2f7d;
+  --logo-2: #22399a;
+
+  --cat-organize: #d2452f;
+  --cat-edit: #c0306f;
+  --cat-convert: #7247c9;
+  --cat-bangla: #0b8a55;
+  --cat-image: #d9770f;
+  --cat-data: #0d7f8f;
+  --cat-utility: #4a5468;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #16140f;
-    --paper-2: #1e1b15;
-    --sheet: #221f18;
-    --ink: #efe8da;
-    --ink-2: #b8ae9b;
-    --ink-3: #857c6b;
-    --rule: #353026;
-    --rule-strong: #4a4335;
-    --margin: #e2604c;
-    --margin-soft: #3a211b;
-    --accent: #8db4f0;
-    --ok: #6cc290;
+    --paper: #0e1118;
+    --paper-2: #171b25;
+    --sheet: #151a24;
+    --ink: #e9ecf2;
+    --ink-2: #b2b9c8;
+    --ink-3: #7f879a;
+    --rule: #252b38;
+    --rule-strong: #353d4f;
+    --margin: #7f9cff;
+    --margin-soft: #1d2647;
+    --accent: #a9bcff;
+    --ok: #5fcf96;
+    --danger: #ff8a7a;
+    --danger-soft: #3a1d1a;
+    --cover: #111b45;
+    --cover-2: #172459;
+    --label-line: #33427a;
+    --logo: #4a68e0;
+    --logo-2: #5b78ec;
+
+    --cat-organize: #ff7a63;
+    --cat-edit: #f06aa5;
+    --cat-convert: #a98bff;
+    --cat-bangla: #3fcf8e;
+    --cat-image: #ffaa4d;
+    --cat-data: #45c4d4;
+    --cat-utility: #9aa3b8;
   }
 }
 
@@ -46,44 +80,72 @@
   --color-margin-soft: var(--margin-soft);
   --color-accent: var(--accent);
   --color-ok: var(--ok);
-  --font-sans: var(--font-geist-sans), var(--font-bangla), system-ui, sans-serif;
-  --font-display: var(--font-fraunces), var(--font-bangla), Georgia, serif;
-  --font-bangla: var(--font-hind), var(--font-geist-sans), sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-cover: var(--cover);
+  --color-cover-2: var(--cover-2);
+  --font-sans: var(--font-anek), system-ui, sans-serif;
+  --font-display: var(--font-anek), system-ui, sans-serif;
+  --font-bangla: var(--font-anek), system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 
 body {
   background: var(--paper);
   color: var(--ink);
+  font-feature-settings: "kern";
 }
 
-/* Faint ruled lines, like a khata page. */
+/* Display type uses Anek's expanded width; body stays at normal width. */
+.font-display {
+  font-stretch: 112%;
+  letter-spacing: -0.02em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--margin);
+  outline-offset: 2px;
+}
+
+/* Drop zones: a faint dot grid instead of a flat fill. */
 .ruled {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 31px,
-    var(--rule) 31px,
-    var(--rule) 32px
-  );
+  background-image: radial-gradient(var(--rule-strong) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
-/* The red double margin line down the left of a sheet. */
+/* Kept for tool UIs that used it; the margin rule is now a quiet left accent. */
 .margin-line {
   position: relative;
 }
-.margin-line::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 5px;
-  border-left: 1px solid var(--margin);
-  border-right: 1px solid var(--margin);
-  opacity: 0.55;
+
+/* The exercise-book cover: subtle woven texture over the cover blue. */
+.khata-cover {
+  background-color: var(--cover);
+  background-image:
+    repeating-linear-gradient(45deg, rgb(255 255 255 / 0.025) 0 2px, transparent 2px 6px),
+    repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.05) 0 2px, transparent 2px 6px);
+}
+
+/* The name label stuck on the cover: lined like the real thing. */
+.khata-label {
+  background-color: #fffdf6;
+  color: #121722;
+}
+@media (prefers-color-scheme: dark) {
+  .khata-label {
+    background-color: #f3f1ea;
+  }
 }
 
 ::selection {
   background: var(--margin-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

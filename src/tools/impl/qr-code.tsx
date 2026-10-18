@@ -256,7 +256,7 @@ export default function QrCodeTool() {
             </div>
             <Toggle checked={transparent} onChange={setTransparent} label={t({ en: "Transparent background", bn: "স্বচ্ছ পটভূমি" })} />
             {(lowContrast || inverted) && (
-              <p className="text-xs text-margin">
+              <p className="text-xs text-danger">
                 {inverted
                   ? t({ en: "Light code on a dark background — many scanners can't read that.", bn: "গাঢ় পটভূমিতে হালকা কোড — অনেক স্ক্যানার এটি পড়তে পারে না।" })
                   : t({ en: "Low contrast — the code may not scan.", bn: "রঙের পার্থক্য কম — কোডটি স্ক্যান না-ও হতে পারে।" })}

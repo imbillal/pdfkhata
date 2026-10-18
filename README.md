@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PDFKhata
 
-## Getting Started
+Free PDF, image and Bangla document tools that run entirely in the browser.
+Live at https://pdfkhata.billal.dev, in English (`/en/`) and Bangla (`/bn/`).
 
-First, run the development server:
+- 40 tools: organize/edit/convert PDFs, Bangla OCR, Bijoy ⇄ Unicode, image, data and utilities
+- No backend: files never leave the visitor's device
+- Static Next.js export (`output: "export"`), deployed on Vercel
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000 → redirects to /en/ or /bn/
+npm run type-check
+npm run lint
+node --experimental-strip-types --test scripts/bijoy.test.mts   # Bijoy converter tests
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build        # static site in out/ (prebuild copies the pdf.js worker into public/vendor)
+npx serve out        # preview the production build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Share images
 
-## Learn More
+Open Graph images live in `public/og/<lang>/<slug>.jpg` and are committed.
+Regenerate them after changing tool names or blurbs:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run build && npm run og && npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`npm run og` renders `/og-card/<lang>/<slug>/` in Chromium (Playwright) so Bangla text is shaped correctly.
+If Chromium is missing: `npx playwright install chromium`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy (Vercel)
 
-## Deploy on Vercel
+1. Import the GitHub repo in Vercel. The framework is detected as Next.js; `vercel.json` sets the build command, and Vercel serves the static export automatically.
+2. Add the domain `pdfkhata.billal.dev` in Project → Settings → Domains, and point a `CNAME` for `pdfkhata` at `cname.vercel-dns.com`.
+3. `/` redirects by `Accept-Language` (Bangla → `/bn/`, everyone else → `/en/`), configured in `vercel.json`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The site URL used for canonical links, the sitemap and share images is in `src/lib/site.ts`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Adding a tool
+
+1. Add it to `src/tools/registry.ts` (bilingual name/blurb, category, accepted file kinds).
+2. Create `src/tools/impl/<slug>.tsx` (default export, `"use client"`, every string via `useT()`).
+3. Add it to `src/tools/loaders.tsx` and pick an icon in `src/tools/icons.tsx`.
+4. Write its SEO copy in `src/tools/content/`.
+5. Regenerate share images.

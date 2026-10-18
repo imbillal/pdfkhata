@@ -7,6 +7,7 @@ import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 
 import { formatBytes } from "@/lib/files";
 import { takeHandoff } from "@/lib/handoff";
 import { useT } from "@/i18n/LocaleProvider";
+import { Upload } from "lucide-react";
 
 /* ---------- Layout ---------- */
 
@@ -23,7 +24,7 @@ export function Workspace({ main, side }: { main: ReactNode; side?: ReactNode })
 /** A paper card with the red margin line. */
 export function Sheet({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <div className={`margin-line rounded-lg border border-rule bg-sheet py-5 pr-5 pl-7 shadow-[0_1px_0_var(--rule)] ${className}`}>
+    <div className={`rounded-2xl border border-rule bg-sheet p-5 sm:p-6 ${className}`}>
       {children}
     </div>
   );
@@ -31,8 +32,8 @@ export function Sheet({ children, className = "" }: { children: ReactNode; class
 
 export function SideSection({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="rounded-lg border border-rule bg-sheet p-4">
-      <h3 className="mb-3 text-xs font-semibold tracking-[0.12em] text-ink-3 uppercase">{title}</h3>
+    <section className="rounded-2xl border border-rule bg-sheet p-5">
+      <h3 className="mb-3 text-[0.95rem] font-semibold text-ink">{title}</h3>
       <div className="flex flex-col gap-3">{children}</div>
     </section>
   );
@@ -85,8 +86,8 @@ export function FileDrop({
         setOver(false);
         take(e.dataTransfer.files);
       }}
-      className={`ruled flex min-h-56 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-6 py-10 text-center transition-colors ${
-        over ? "border-margin bg-margin-soft" : "border-rule-strong bg-sheet hover:border-ink-3"
+      className={`ruled flex min-h-64 cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed px-6 py-12 text-center transition-colors ${
+        over ? "border-margin bg-margin-soft" : "border-rule-strong bg-sheet hover:border-margin/60"
       }`}
     >
       <input
@@ -100,10 +101,13 @@ export function FileDrop({
           e.target.value = "";
         }}
       />
-      <span className="rounded-full bg-ink px-5 py-2 text-sm font-medium text-paper">
+      <span className="grid size-14 place-items-center rounded-2xl bg-margin-soft text-margin" aria-hidden>
+        <Upload className="size-6" strokeWidth={1.9} />
+      </span>
+      <span className="rounded-xl bg-margin px-6 py-3 font-semibold text-white shadow-sm">
         {title ?? (multiple ? t({ en: "Choose files", bn: "ফাইল বেছে নিন" }) : t({ en: "Choose a file", bn: "একটি ফাইল বেছে নিন" }))}
       </span>
-      <span className="text-sm text-ink-2">{t({ en: `or drop ${multiple ? "them" : "it"} here`, bn: "অথবা এখানে টেনে এনে ছাড়ুন" })}</span>
+      <span className="text-[0.95rem] text-ink-2">{t({ en: `or drop ${multiple ? "them" : "it"} here`, bn: "অথবা এখানে টেনে এনে ছাড়ুন" })}</span>
       {hint && <span className="mt-1 text-xs text-ink-3">{hint}</span>}
     </label>
   );
@@ -123,7 +127,7 @@ export function Field({ label, children, hint }: { label: string; children: (id:
 }
 
 export const inputClass =
-  "w-full rounded-md border border-rule-strong bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-ink-2 focus:ring-2 focus:ring-margin-soft";
+  "w-full rounded-lg border border-rule-strong bg-sheet px-3 py-2.5 text-[0.95rem] text-ink outline-none focus:border-margin focus:ring-2 focus:ring-margin/20";
 
 export function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return <textarea {...props} className={`${inputClass} min-h-48 font-mono leading-relaxed ${props.className ?? ""}`} />;
@@ -142,7 +146,7 @@ export function Segmented<T extends string>({
   label: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="flex flex-wrap gap-1 rounded-md border border-rule-strong bg-paper p-1">
+    <div role="radiogroup" aria-label={label} className="flex flex-wrap gap-1 rounded-xl bg-paper-2 p-1">
       {options.map((o) => (
         <button
           key={o.value}
@@ -150,8 +154,8 @@ export function Segmented<T extends string>({
           role="radio"
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`flex-1 rounded px-2.5 py-1.5 text-sm whitespace-nowrap ${
-            value === o.value ? "bg-ink text-paper" : "text-ink-2 hover:bg-paper-2"
+          className={`flex-1 rounded-lg px-2.5 py-1.5 text-[0.93rem] whitespace-nowrap ${
+            value === o.value ? "bg-sheet font-semibold text-ink shadow-sm" : "text-ink-2 hover:text-ink"
           }`}
         >
           {o.label}
@@ -171,8 +175,8 @@ export function Button({
   ...rest
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" | "ghost"; busy?: boolean }) {
   const styles = {
-    primary: "bg-margin text-white hover:brightness-110 disabled:opacity-50",
-    secondary: "border border-rule-strong bg-sheet text-ink hover:border-ink-3 disabled:opacity-50",
+    primary: "bg-margin text-white shadow-sm hover:bg-accent disabled:opacity-50",
+    secondary: "border border-rule-strong bg-sheet text-ink hover:border-margin/60 disabled:opacity-50",
     ghost: "text-ink-2 hover:bg-paper-2 hover:text-ink disabled:opacity-50",
   }[variant];
   return (
@@ -180,7 +184,7 @@ export function Button({
       type="button"
       {...rest}
       disabled={rest.disabled || busy}
-      className={`inline-flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition ${styles} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[0.95rem] font-semibold transition ${styles} ${className}`}
     >
       {busy && <span className="size-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden />}
       {children}
@@ -193,7 +197,7 @@ export function Button({
 export function ErrorNote({ message }: { message: string | null }) {
   if (!message) return null;
   return (
-    <p role="alert" className="rounded-md border border-margin/40 bg-margin-soft px-3 py-2 text-sm text-ink">
+    <p role="alert" className="rounded-xl border border-danger/30 bg-danger-soft px-3.5 py-2.5 text-[0.95rem] text-ink">
       {message}
     </p>
   );
@@ -228,7 +232,7 @@ export function FileRow({
   const t = useT();
   return (
     <div className="flex items-center gap-3 border-b border-rule py-2.5 last:border-b-0">
-      <span className="grid size-9 shrink-0 place-items-center rounded bg-paper-2 font-mono text-[10px] text-ink-2 uppercase">
+      <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-margin-soft font-mono text-[10px] font-semibold text-margin uppercase">
         {file.name.split(".").pop()?.slice(0, 4)}
       </span>
       <div className="min-w-0 flex-1">
@@ -250,7 +254,7 @@ export function FileRow({
 /** Result panel: what was produced and a download button. */
 export function ResultBox({ title, detail, children }: { title: string; detail?: string; children: ReactNode }) {
   return (
-    <div className="rounded-lg border border-ok/40 bg-sheet p-4">
+    <div className="rounded-2xl border border-ok/40 bg-sheet p-5" style={{ backgroundColor: "color-mix(in srgb, var(--ok) 6%, var(--sheet))" }}>
       <p className="flex items-center gap-2 text-sm font-semibold text-ok">
         <svg viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
           <path d="m4 10 4 4 8-8" strokeLinecap="round" strokeLinejoin="round" />

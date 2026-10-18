@@ -1,32 +1,27 @@
-import Link from "next/link";
 import { CATEGORIES, toolsIn } from "@/tools/registry";
+import { CATEGORY_COLOR } from "@/tools/icons";
+import { ToolCard } from "@/components/ToolCard";
 import { translator, type Locale } from "@/i18n/locale";
 
-/** Table-of-contents style listing of every tool, grouped by chapter. */
+/** Every tool, grouped by category, with anchors the menus link to. */
 export function ToolIndex({ locale }: { locale: Locale }) {
   const t = translator(locale);
   return (
-    <div className="flex flex-col gap-14">
-      {CATEGORIES.map((c, i) => (
-        <section key={c.id} id={c.id} className="scroll-mt-24 grid gap-6 md:grid-cols-[220px_minmax(0,1fr)]">
-          <header>
-            <p className="font-mono text-xs text-margin">
-              {t({ en: "Chapter", bn: "অধ্যায়" })} {t.n(i + 1, { minimumIntegerDigits: 2 })}
-            </p>
-            <h2 className="mt-1 font-display text-2xl font-semibold">{t(c.name)}</h2>
-            <p className="mt-2 text-sm text-ink-2">{t(c.blurb)}</p>
+    <div className="flex flex-col gap-16">
+      {CATEGORIES.map((c) => (
+        <section key={c.id} id={c.id} className="scroll-mt-24">
+          <header className="mb-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span aria-hidden className="size-3 self-center rounded-full" style={{ backgroundColor: CATEGORY_COLOR[c.id] }} />
+            <h2 className="font-display text-2xl font-bold">{t(c.name)}</h2>
+            <p className="text-ink-2">{t(c.blurb)}</p>
           </header>
-          <ol className="grid gap-x-10 sm:grid-cols-2">
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {toolsIn(c.id).map((tool) => (
-              <li key={tool.slug} className="border-b border-dotted border-rule-strong">
-                <Link href={t.href(`/tools/${tool.slug}/`)} className="group flex items-baseline gap-3 py-3">
-                  <span className="font-medium group-hover:text-margin">{t(tool.name)}</span>
-                  <span className="hidden min-w-0 flex-1 truncate text-sm text-ink-3 lg:block">{t(tool.blurb)}</span>
-                  <span className="ml-auto text-ink-3 group-hover:text-margin">→</span>
-                </Link>
+              <li key={tool.slug}>
+                <ToolCard tool={tool} href={t.href(`/tools/${tool.slug}/`)} pick={t} />
               </li>
             ))}
-          </ol>
+          </ul>
         </section>
       ))}
     </div>
